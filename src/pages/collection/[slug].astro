@@ -1,0 +1,56 @@
+---
+const { slug } = Astro.params;
+import { useSanityClient } from "astro-sanity";
+import Navbar from "../../components/Navbar";
+
+const currentSeries = await useSanityClient().fetch(
+  `*[_type == "series" && slug.current=="${slug}"][0]`
+);
+import { urlForImage } from "../../sanity/urlForImage";
+const seriesPics = currentSeries.photos.map((image: any) => {
+  return urlForImage(image).url();
+});
+const personalSeries = await useSanityClient().fetch(
+  `*[_type == "series" && category=="personal"]{title,slug}`
+);
+const commissionedSeries = await useSanityClient().fetch(
+  `*[_type == "series" && category=="commission"]{title,slug}`
+);
+import MasonryComponent from "../../components/MasonryComponent";
+---
+
+<html class="">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Astro description" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{currentSeries?.title}</title>
+  </head>
+  <body>
+    <Navbar
+      client:load
+      personalOptions={personalSeries}
+      commissionedOptions={commissionedSeries}
+    />
+    <div class="h-[120px]"></div>
+    <section class="m-auto max-w-[1400px]">
+      <div class="flex flex-col md:flex-row px-4 justify-center gap-20 mb-20">
+        <h3 class="leading-[100px] text-[150px] font-bold">
+          {currentSeries?.title}
+        </h3>
+        <div class="">
+          <p class="font-bold">Year</p>
+          <p class="">2019 <br /><br /></p>
+          <p class="font-bold">Description</p>
+          <p class="">Description here</p>
+        </div>
+      </div>
+
+      <div class="max-w-[1400px] px-4">
+        <MasonryComponent client:load series={seriesPics} />
+      </div>
+    </section>
+  </body>
+</html>
