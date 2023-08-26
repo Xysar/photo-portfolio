@@ -4,7 +4,7 @@ import { useSanityClient } from "astro-sanity";
 import Navbar from "../../components/Navbar";
 import Gallery from "../../components/Gallery";
 import Footer from "../../components/Footer.astro";
-
+if (!slug) return Astro.redirect("/404");
 const currentSeries = await useSanityClient().fetch(
   `*[_type == "series" && slug.current=="${slug}"][0]`
 );
