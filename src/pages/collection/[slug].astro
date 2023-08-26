@@ -3,7 +3,6 @@ const { slug } = Astro.params;
 import { useSanityClient } from "astro-sanity";
 import Navbar from "../../components/Navbar";
 import Gallery from "../../components/Gallery";
-import Footer from "../../components/Footer.astro";
 
 const currentSeries = await useSanityClient().fetch(
   `*[_type == "series" && slug.current=="${slug}"][0]`
@@ -37,23 +36,24 @@ import MasonryComponent from "../../components/MasonryComponent";
       commissionedOptions={commissionedSeries}
     />
     <div class="h-[120px]"></div>
-    <Gallery client:load series={seriesPics} index={0} />
+    <Gallery series={seriesPics} index={0} />
     <section class="m-auto max-w-[1400px]">
+      <div class=""></div>
       <div class="flex flex-col md:flex-row px-4 justify-center gap-20 mb-20">
-        <h3
-          class="w-[100px] flex-1 basis-2/3 leading-[150px] text-[150px] font-bold"
-        >
+        <h3 class="leading-[100px] text-[150px] font-bold">
           {currentSeries?.title}
         </h3>
-        <p class="w-[100px] flex-1 basis-1/3 text-lg leading-10">
-          {currentSeries?.description}
-        </p>
+        <div class="">
+          <p class="font-bold">Year</p>
+          <p class="">2019 <br /><br /></p>
+          <p class="font-bold">Description</p>
+          <p class="">Description here</p>
+        </div>
       </div>
 
-      <div class="max-w-[1400px] px-4 pb-8">
+      <div class="max-w-[1400px] px-4">
         <MasonryComponent client:load series={seriesPics} />
       </div>
-      <Footer />
     </section>
   </body>
 </html>
